@@ -21,3 +21,5 @@ class Alarm(Observer):
 
     def isTime(self, time):
         return time >= self.__finalTime
+    
+    #testing
