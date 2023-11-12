@@ -6,7 +6,7 @@ from physicalObject import physicalObject
 
 class LaserBeam(physicalObject):
 
-    def __init__(self, initialPosition:tuple, direction:int):
+    def __init__(self, initialPosition:tuple, direction:int, inpactFuntion=None):
         imagen = pg.surface.Surface((100, 100))
         imagen.fill((0,255,0))
         super().__init__(0, (100, 50), {"initial":[[imagen], 120]}, FPS=5, initialPosition=initialPosition)
@@ -59,6 +59,9 @@ class kirby(cpo):
 
     def getCartas(self):
         return self.__cartas
+
+    def __conectaDisparo(self, enemigo):
+        self.__cartas += 0.1
 
     def update(self, colector=None):
         super().update()
