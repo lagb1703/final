@@ -1,4 +1,4 @@
-from controllablePalyerObject import controllablePalyerObject as cpo
+from controllablePlayerObject import controllablePlayerObject as cpo
 import pygame as pg
 from Alarm import Alarm
 from Bullets import Bullet

@@ -10,6 +10,7 @@ class Level(GUI, Observable):
         super().__init__(display, backgroud, layers=layers)
         Observable.__init__()
         self.__objects = {}
+        self.__cameraOldPosition = [camara.x, camara.y]
         self._camara = camara
         self.time = 0
 
