@@ -7,11 +7,11 @@ SPEED, FPS = 5, 60
 
 pg.init()
 display = pg.display.set_mode((WIDTH, HEIGHT))
-background = pg.image.load("grass.png").convert_alpha()
+background = pg.image.load("./imagenes/grass.png").convert_alpha()
 back_rect = background.get_rect()
 back_rect.y = HEIGHT//2
 back_rect.x = 0
-dino_image = pg.image.load("dino.png").convert_alpha()
+dino_image = pg.image.load("./imagenes/dino.png").convert_alpha()
 dino_rect = dino_image.get_rect()
 dino_rect.center = (0, 0)
 clock = pg.time.Clock()

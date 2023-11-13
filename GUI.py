@@ -1,4 +1,5 @@
 import pygame as pg
+from Object import Objects
 
 class GUI:
 
@@ -8,6 +9,7 @@ class GUI:
         self._backgroud:pg.surface.Surface = pg.transform.scale(backgroud, resolution)
         self.resolution = resolution
         self.__layers = [None]*layers
+        self._backgroudInitial:pg.surface.Surface = backgroud
 
     def init(self):
         pass
@@ -20,14 +22,18 @@ class GUI:
         self.resolution = resolution
         self._display = pg.transform.scale()
 
-    def logic(self):
+    def logic(self, nextGui=None):
         self._display.blit(self._backgroud, (0,0))
         for i in self.__layers:
             if i:
                 i.draw(self.display, self.time)
+        pg.display.update()
 
     def exit(self):
         self.__exit = True
+
+    def getExit(self):
+        return self.__exit
 
     def addObjectInLayer(self, object:object, z=0):
         if self.__layers[z]:

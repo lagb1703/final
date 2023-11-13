@@ -29,7 +29,7 @@ class Level(GUI, Observable):
                 if not(i.isRepeat()):
                     self.removeObserver(id = i.id)
 
-    def logic(self):
+    def logic(self, nextGui=None):
         super().logic()
         self.notifyAll()
         collector = [[], [], self.time/self.FPS]
