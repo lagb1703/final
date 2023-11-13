@@ -26,6 +26,10 @@ class Object(pg.sprite.Sprite):
     def getAnimationName(self):
         return self.__animationName
 
+    def setAnimationName(self, animation:str):
+        self.__frame = 0
+        self.__animationName = animation
+
     def destroy(self):
         del self
     

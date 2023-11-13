@@ -10,9 +10,14 @@ class GUI:
         self.resolution = resolution
         self.__layers = [None]*layers
         self._backgroudInitial:pg.surface.Surface = backgroud
+        self.__numberLayers = layers
+        self._backgroudPosition = [0,0]
 
     def init(self):
         pass
+
+    def getNumberLayers(self):
+        return self.__numberLayers
 
     def restar(self):
         self._display.fill((0,0,0,0))
@@ -23,7 +28,7 @@ class GUI:
         self._display = pg.transform.scale()
 
     def logic(self, nextGui=None):
-        self._display.blit(self._backgroud, (0,0))
+        self._display.blit(self._backgroud, self._backgroudPosition)
         for i in self.__layers:
             if i:
                 i.draw(self.display, self.time)
@@ -50,6 +55,9 @@ class GUI:
         self.__layers[z] = Layer(z)
         for i in objects.sprites():
                 self.__layers[z].add(i)
+
+    def getLayers(self):
+        return self.__layers
 
     def pause(self):
         return False

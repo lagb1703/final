@@ -12,3 +12,8 @@ class Layer(pg.sprite.Group):
                 return
             if time%i.getAnimationFrameMax() == 0:
                 i.animar()
+
+    def moveAllDistance(self, distancia:tuple):
+        for sprite in self.sprites():
+            sprite.rect.x += distancia[0]
+            sprite.rect.y += distancia[1]
