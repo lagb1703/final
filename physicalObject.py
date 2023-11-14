@@ -28,7 +28,7 @@ class physicalObject(Object):
         or (object.rect.x <= self.rect.x + self.resolution[0] <= object.rect.x + object.resolution[0])):
             return False
         #print(object.rect.y, self.rect.y)
-        if not(object.rect.y >= self.rect.y >= object.rect.y - distance - object.resolution[1]):
+        if not(object.rect.y >= self.rect.y + self.resolution[1] >= object.rect.y - distance):
             return False
         return True
 

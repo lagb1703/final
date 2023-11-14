@@ -50,15 +50,17 @@ class Level(GUI, Observable):
 
 
     def logic(self, nextGui=None):
-        distancia = self.cameraMove()
+        # distancia = self.cameraMove()
         self._display.blit(self._backgroud, self._backgroudPosition)
         for i in self.getLayers():
             if i:
                 i.draw(self._display, self.time)
-                i.moveAllDistance(distancia)
-        newDisplay = pg.transform.scale(self._display, self.__scales)
-        self._display.fill((0,0,0,0))
-        self._display.blit(newDisplay, (0,0))
+        #         i.moveAllDistance(distancia)
+        # newDisplay = pg.transform.scale(self._display, self.__scales)
+        # self._display.fill((0,0,0,0))
+        # self._display.blit(newDisplay, (0,0))
+        # image = pg.image.load("./sprites/Kirby/Default.png")
+        # self._display.blit(image, (0,0))
         pg.display.update()
         self.notifyAll()
         collector = [[], [], self.time/self.FPS]

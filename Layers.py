@@ -5,13 +5,17 @@ class Layer(pg.sprite.Group):
         super().__init__()
         self.z = z
 
-    def draw(self, surface, time):
-        super().draw(surface)
+    def draw(self, surface:pg.surface.Surface, time):
+        # super().draw(surface)
         for i in self.sprites():
-            if i.getAnimationFrameMax() == 0:
-                return
-            if time%i.getAnimationFrameMax() == 0:
-                i.animar()
+            if i.getAnimationFrameMax() != 0:
+                if time%i.getAnimationFrameMax() == 0:
+                    i.animar()
+            i.draw(surface)
+            # image = pg.image.load("./sprites/Kirby/Default.png")
+            # print(i.image.get_alpha())
+            # surface.blit(i.image, (0,0))
+            #surface.blit(i.image, (0,0))
 
     def moveAllDistance(self, distancia:tuple):
         for sprite in self.sprites():

@@ -39,7 +39,7 @@ class inicio(GUI):
         if Control.control:
             self.exit()
             if nextGui:
-                nextGui.append("nada")
+                pass
             return
         Control.create()
         
@@ -56,7 +56,7 @@ class entryLevel(Level):
         sueloReal = paredInvisible(1, (0, self.resolution[1]-20), (self.resolution[0], 20))
         self.getObjectsGroup("decoracion").add(decoracion)
         self.getObjectsGroup("collition").add(sueloReal)
-        jugador = kirby({"suelo":self.getObjectsGroup("collition")})
+        jugador = kirby((100, 300), {"suelo":self.getObjectsGroup("collition")})
         self.getObjectsGroup("player").add(jugador)
         self.addObjectInLayer(decoracion, z=1)
         self.addObjectInLayer(jugador, z=2)

@@ -15,15 +15,19 @@ class Object(pg.sprite.Sprite):
         self.id = id
         self.__animations = animations
         self.resolution = resolution
-        self.image = surface.Surface(resolution)
-        imagen = pg.transform.scale(animations[initialSprite][0][0], resolution)
-        #self.image.blit(animations[initialSprite][0][0], (resolution[0]//2, resolution[1]//2))
-        self.image.blit(imagen, (0,0))
+        # self.image = surface.Surface(resolution)
+        # image = pg.transform.scale(animations[initialSprite][0][0], resolution)
+        # self.image.blit(imagen, (0,0))
+        # self.image.blit(animations[initialSprite][0][0], (resolution[0]//2, resolution[1]//2))
+        self.image = pg.transform.scale(animations[initialSprite][0][0], resolution)
         self.rect = self.image.get_rect()
         self.rect.x = initialPosition[0]
         self.rect.y = initialPosition[1]
         self.__frame = 0
         self.__animationName = initialSprite
+
+    def draw(self, surface:pg.surface.Surface):
+        surface.blit(self.image, self.rect)
 
     def getAnimationName(self):
         return self.__animationName
@@ -41,10 +45,8 @@ class Object(pg.sprite.Sprite):
         self.__frame += 1
         if len(self.__animations[self.__animationName][0]) <= self.__frame:
             self.__frame = 0
-        self.image.fill((0,0,0,0))
-        #self.image.blit(self.__animations[self.__animationName][0][self.__frame], (0, 0))
         imagen = pg.transform.scale(self.__animations[self.__animationName][0][self.__frame], self.resolution)
-        self.image.blit(imagen, (0, 0))
+        self.image = imagen
 
     def getAnimationFrameMax(self):
         return self.__animations[self.__animationName][1]
