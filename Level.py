@@ -6,25 +6,23 @@ from GUI import GUI
 
 class Level(GUI, Observable):
 
-    def __init__(self, display:pg.surface.Surface, backgroud:pg.surface.Surface, camara:Camera, resolution=(720, 460), layers=7):
-        Observable.__init__()
-        self.__exit = False
-        self._display:pg.surface.Surface = display
-        self._backgroud:pg.surface.Surface = pg.transform.scale(backgroud, resolution)
-        self.resolution = resolution
-        self.__layers = [None]*layers
-        self._backgroudInitial:pg.surface.Surface = backgroud
-        self.__numberLayers = layers
+    def __init__(self, display:pg.surface.Surface, backgroud:pg.surface.Surface, camara:Camera, resolution=(720, 420), screenResolution=(720, 420), layers=7, FPS=60):
+        Observable.__init__(self)
+        GUI.__init__(self, display, backgroud, resolution=resolution, layers=layers)
+        self.screenResolution = screenResolution
         self.__objects = {}
         self.__cameraOldPosition = [camara.x, camara.y]
         self._camara = camara
         self.time = 0
-        self.__scales:tuple = (resolution[0]/camara.resolution[0], resolution[1]/camara.resolution[1])
+        self.FPS = FPS
+        self.__scales:tuple = (resolution[0]*screenResolution[0]/camara.resolution[0], resolution[1]*screenResolution[1]/camara.resolution[1])
 
     def addObjectsGroup(self, Group:Objects):
         self.__objects[Group.groupName] = Group
 
     def getObjectsGroup(self, name:str):
+        if not(self.__objects.get(name)):
+            self.__objects[name] = Objects(name)
         return self.__objects[name]
 
     def removeObjectsGroup(self, name:str):
@@ -39,25 +37,32 @@ class Level(GUI, Observable):
 
     def cameraMove(self):
         self._camara.update()
-        distanciaX = self._camara.x - self.__cameraOldPosition[0]
-        distanciaY = self._camara.y - self.__cameraOldPosition[1]
-        self._backgroudPosition = (self._backgroudPosition[0] + distanciaX,
-        self._backgroudPosition[1] + distanciaY)
+        distanciaX = 0
+        distanciaY = 0
+        if self._camara.x + self._camara.resolution[0] < self.resolution[0]:
+            self._camara.x += 1
+            distanciaX = self.__cameraOldPosition[0] - self._camara.x
+        if self._camara.y < self.resolution[1]:
+            distanciaY = self.__cameraOldPosition[1] - self._camara.y
+        self._backgroudPosition = (self._backgroudPosition[0] + distanciaX/90,
+        self._backgroudPosition[1] + distanciaY/90)
         return (distanciaX, distanciaY)
 
 
     def logic(self, nextGui=None):
         distancia = self.cameraMove()
         self._display.blit(self._backgroud, self._backgroudPosition)
-        for i in self.getLayers:
+        for i in self.getLayers():
             if i:
-                i.draw(self.display, self.time)
+                i.draw(self._display, self.time)
                 i.moveAllDistance(distancia)
-        self._display = pg.transform.scale(self._display, self.__scales)
+        newDisplay = pg.transform.scale(self._display, self.__scales)
+        self._display.fill((0,0,0,0))
+        self._display.blit(newDisplay, (0,0))
         pg.display.update()
         self.notifyAll()
         collector = [[], [], self.time/self.FPS]
-        for i in self.__objects:
+        for i in self.__objects.values():
             i.update(colector=collector)
         for i in collector[0]:
             self.addObserver(i)

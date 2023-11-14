@@ -1,4 +1,5 @@
 import pygame as pg
+from Layers import Layer
 from Object import Objects
 
 class GUI:

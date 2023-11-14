@@ -5,7 +5,7 @@ import sys
 
 from GUI import GUI
 from Level import Level
-from guisEntitys import inicio
+import guisEntitys
 
 class Game:
 
@@ -30,7 +30,8 @@ class Game:
     def gameLoop(self):
         pg.init()
         self.display = pg.display.set_mode(self.resolution)
-        self.__guis = [inicio(self.display, self.resolution)]
+        self.__guis = [guisEntitys.inicio(self.display, self.resolution),
+        guisEntitys.entryLevel(self.display, self.resolution, self.resolution)]
         os.environ["SDL_VIDEO_CENTERED"] = '1'
         clock = pg.time.Clock()
         while not(self.__exit) and len(self.__guis) > 0:
@@ -51,7 +52,7 @@ class Game:
         self.resolution = newResolution
         self.display = pg.display.set_mode(newResolution)
 
-g:Game = Game.create(resolution=(720, 460))
+g:Game = Game.create(resolution=(720, 420))
 
 
 
