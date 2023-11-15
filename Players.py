@@ -46,7 +46,7 @@ class kirby(cpo):
         "aterrizaje":aterrizaje,
         "disparo":disparo}, initialPosition=posicion, FPS=60)
         self.aceleration = [0, 9.8]
-        self.initialSpeed = [0.9, -1]
+        self.initialSpeed = [0.9, -30]
         self.grupos = grupos
         self.__dash = False
         self.__dashHabilitado = True
@@ -108,8 +108,11 @@ class kirby(cpo):
         else:
             self.__dashHabilitado = True
             if input.FOUR and not(self.collitionDownGroup(self.grupos["suelo"], 1)):
-                self.setAnimationName("preSalto")
-                colector[0].append(Alarm(colector[2], 1.5, False, self.__setSalto))
+                if not(input.LEFT or input.RIGTH):
+                    self.setAnimationName("preSalto")
+                    colector[0].append(Alarm(colector[2], 1.2, False, self.__setSalto))
+                else:
+                    colector[0].append(Alarm(colector[2], 0.6, False, self.__setSalto))
 
         if input.THREE and self.__disparoHabilitado:
             self.__disparoHabilitado = False
