@@ -35,6 +35,8 @@ class Object(pg.sprite.Sprite):
         return self.__animationName
 
     def setAnimationName(self, animation:str):
+        if self.__animationName == animation:
+            return
         self.__frame = 0
         self.__animationName = animation
 

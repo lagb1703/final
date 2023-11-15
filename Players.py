@@ -10,7 +10,7 @@ class LaserBeam(physicalObject):
 
     def __init__(self, initialPosition:tuple, direction:int, inpactFuntion=None):
         imagen = pg.surface.Surface((100, 100))
-        imagen.fill((0,255,0))
+        imagen.fill((0,0,0))
         super().__init__(0, (100, 30), {"initial":[[imagen], 120]}, FPS=60, initialPosition=initialPosition)
         self.__enviado = False
         self.__tamaño = 0
@@ -33,16 +33,20 @@ class kirby(cpo):
         ruteKirby = "./sprites/Kirby/"
         default = [[load(f"{ruteKirby}Default.png").convert_alpha()], 1]
         caminar = [[load(f"{ruteKirby}Caminar/caminar {i}.png").convert_alpha() for i in range(1,9)], 60]
-        preSalto = [[load(f"{ruteKirby}Saltar/presalto-aterrizaje.png"), load(f"{ruteKirby}Saltar/saltico1.png"), load(f"{ruteKirby}Saltar/saltico2.png")], 10]
+        preSalto = [[load(f"{ruteKirby}Saltar/presalto-aterrizaje.png"), 
+            load(f"{ruteKirby}Saltar/saltico1.png"), 
+            load(f"{ruteKirby}Saltar/saltico2.png")], 120]
         salto = [[load(f"{ruteKirby}Saltar/aire.png")], 1]
         aterrizaje = [[load(f"{ruteKirby}Saltar/aterrizar.png"), preSalto[0]], 10]
+        disparo = [[load(f"{ruteKirby}Disparo/disparo {i}.png").convert_alpha() for i in range(1,5)], 60]
         super().__init__(0, (100, 70), {"initial":default,
         "caminar":caminar,
         "preSalto":preSalto,
         "salto":salto,
-        "aterrizaje":aterrizaje}, initialPosition=posicion, FPS=60)
+        "aterrizaje":aterrizaje,
+        "disparo":disparo}, initialPosition=posicion, FPS=60)
         self.aceleration = [0, 9.8]
-        self.initialSpeed = [0.9, -35]
+        self.initialSpeed = [0.9, -1]
         self.grupos = grupos
         self.__dash = False
         self.__dashHabilitado = True
@@ -74,6 +78,11 @@ class kirby(cpo):
     def __conectaDisparo(self, enemigo):
         self.__cartas += 0.1
 
+    def __setSalto(self):
+        self.rect.y -= 1
+        self.initialPosition[1] = self.rect.y
+        self.Time[1] = 0
+
     def update(self, colector=None):
         super().update()
         input = self.control.getInput()
@@ -94,20 +103,20 @@ class kirby(cpo):
                 self.rect.x -= 5
             return
         if not(self.collitionUpGroup(self.grupos["suelo"], 1)):
+            self.setAnimationName("salto")
             self.gravity()
         else:
             self.__dashHabilitado = True
             if input.FOUR and not(self.collitionDownGroup(self.grupos["suelo"], 1)):
-                self.rect.y -= 5
-                self.initialPosition[1] = self.rect.y
-                self.Time[1] = 0
                 self.setAnimationName("preSalto")
+                colector[0].append(Alarm(colector[2], 1.5, False, self.__setSalto))
 
         if input.THREE and self.__disparoHabilitado:
             self.__disparoHabilitado = False
             imagen = pg.surface.Surface((500, 500))
             imagen.fill((0,0,0))
-            colector[0].append(Alarm(colector[2], 3.5, False, self.__habilitarDisparo))
+            self.setAnimationName("disparo")
+            colector[0].append(Alarm(colector[2], 4, False, self.__habilitarDisparo))
             colector[1].append((Bullet(colector[2], (50, 10), 
             {"initial":[[imagen], 0]}, (50*self.direction,0), 100
             , None, initialPosition=(self.rect.x, self.rect.y), FPS=5),"bullets", 1))
@@ -128,5 +137,5 @@ class kirby(cpo):
             self.rect.x += self.initialSpeed[0]
             self.direction = 1
 
-        if not(input.LEFT or input.RIGTH):
+        if not(input.LEFT  or not(self.__disparoHabilitado) or input.THREE or input.FOUR or input.RIGTH or not(self.collitionUpGroup(self.grupos["suelo"], 1))):
             self.setAnimationName("initial")
