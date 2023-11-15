@@ -1,5 +1,6 @@
 import pygame.surface as surface
 import pygame as pg
+import copy
 
 class Objects(pg.sprite.Group):
 
@@ -16,8 +17,9 @@ class Object(pg.sprite.Sprite):
         self.__animations = animations
         self.resolution = resolution
         # self.image = surface.Surface(resolution)
+        # self.image.fill((0,0,0,0))
         # image = pg.transform.scale(animations[initialSprite][0][0], resolution)
-        # self.image.blit(imagen, (0,0))
+        # self.image.blit(image, (0,0))
         # self.image.blit(animations[initialSprite][0][0], (resolution[0]//2, resolution[1]//2))
         self.image = pg.transform.scale(animations[initialSprite][0][0], resolution)
         self.rect = self.image.get_rect()
@@ -36,11 +38,14 @@ class Object(pg.sprite.Sprite):
         self.__frame = 0
         self.__animationName = animation
 
-    def destroy(self):
-        del self
+    def setFrame(self, cantidad:int):
+        self.__frame = cantidad
+
+    def getFrame(self):
+        return self.__frame
     
     def animar(self):
-        if self.__animations[self.__animationName][1] == 0:
+        if self.getAnimationFrameMax() <= 0:
             return
         self.__frame += 1
         if len(self.__animations[self.__animationName][0]) <= self.__frame:

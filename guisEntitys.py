@@ -12,8 +12,6 @@ class sueloDecorativo(Object):
 
     def __init__(self, id, posicion:tuple, medidas:tuple):
         imagen = pg.image.load("./sprites/Background/piso.png")
-        #imagen = pg.surface.Surface((100, 100))
-        #imagen.fill((255, 0, 0))
         super().__init__(id, medidas, {"initial":[[imagen], 0]}, initialPosition=posicion)
 
 class paredInvisible(physicalObject):
@@ -60,7 +58,6 @@ class entryLevel(Level):
         self.getObjectsGroup("player").add(jugador)
         self.addObjectInLayer(decoracion, z=1)
         self.addObjectInLayer(jugador, z=2)
-        #self.addObjectInLayer(paredInvisible)
 
     def logic(self, nextGui=None):
         super().logic(nextGui=nextGui)

@@ -11,6 +11,8 @@ class physicalObject(Object):
         self.mask = pg.mask.from_surface(self.image)
         self.Time = [0,0]
         self.FPS = FPS
+        self.direction = 1
+        self.__aplicado = False
 
     def gravity(self):
         self.Time[1] += 1
@@ -81,3 +83,13 @@ class physicalObject(Object):
             if solucion:
                 return solucion
         return False
+
+    def draw(self, surface:pg.surface.Surface):
+        if self.direction == -1 and not(self.__aplicado):
+            self.image = pg.transform.flip(self.image, True, False)
+            self.__aplicado = True
+        super().draw(surface)
+
+    def animar(self):
+        self.__aplicado = False
+        super().animar()
