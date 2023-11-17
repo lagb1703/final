@@ -8,6 +8,7 @@ from Jefes import Zanahoria, Cebolla
 
 from physicalObject import physicalObject
 import pygame as pg
+from pygame import mixer
 
 class sueloDecorativo(Object):
 
@@ -47,6 +48,8 @@ class fin(GUI):
 
     def __init__(self, display:pg.surface.Surface, resolution:tuple):
         image = pg.image.load("./sprites/Background/good ending.jpg")
+        mixer.music.load('./sprites/Background/WIN.mp3')
+        mixer.music.play()
         super().__init__(display, image, resolution)
         self.init()
 
@@ -60,6 +63,8 @@ class derrota(GUI):
 
     def __init__(self, display:pg.surface.Surface, resolution:tuple):
         image = pg.image.load("./sprites/Background/Death menu.jpg")
+        mixer.music.load('./sprites/Background/GAME OVER.mp3')
+        mixer.music.play()
         super().__init__(display, image, resolution)
         self.init()
 
@@ -73,6 +78,8 @@ class entryLevel(Level):
 
     def __init__(self, display:pg.surface.Surface, resolution:tuple, screenResolution:tuple):
         image = pg.image.load("./sprites/Background/background.jpg")
+        mixer.music.load('./sprites/Background/Music.mp3')
+        mixer.music.play(-1)
         camera = Camera(0, 0, resolution)
         super().__init__(display, image, camera, resolution=resolution, screenResolution=screenResolution)
         self.init()
