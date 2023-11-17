@@ -44,6 +44,8 @@ class Zanahoria(ncpo):
         self.grupos = grupos
         self.__atacando = True
         self.__ends = ends
+        self.__initial = False
+        self.__animation = False
         super().__init__(id, (250, 400), animaciones
             , initialPosition=(0, 50), puntoVida=500)
 
@@ -56,11 +58,17 @@ class Zanahoria(ncpo):
     def __setNormal(self):
         self.setAnimationName("initial")
 
+    def __atack(self):
+        self.__atacando = True
+
     def update(self, colector=None):
         super().update(colector=colector)
         if self.__atacando:
             colector[0].append(
                 Alarm(colector[2], 4, False, self.__setNormal)
+            )
+            colector[0].append(
+                Alarm(colector[2], 40, False, self.__atack)
             )
             colector[1].append(
                 (zanahoriaBullet(colector[2], self.grupos, self.__inpactFunction, self.screanResolution, 

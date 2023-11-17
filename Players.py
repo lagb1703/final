@@ -156,8 +156,8 @@ class kirby(cpo):
         self.rect.x += valor
 
     def __atras(self):
-        self.livePoints = 0
-        self.aumentarX(-1*self.direction*1.3)
+        self.livePoints -= 10
+        self.aumentarX(-1*self.direction*4)
 
     def __patronEnemigos(self, colector=None):
         if self.collitionOnGroup(self.grupos["enemigos"]):
