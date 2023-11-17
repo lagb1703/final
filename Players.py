@@ -43,7 +43,7 @@ class kirby(cpo):
         "preSalto":preSalto,
         "salto":salto,
         "aterrizaje":aterrizaje,
-        "disparo":disparo}, initialPosition=posicion, FPS=60)
+        "disparo":disparo}, initialPosition=posicion, FPS=60, puntoVida=120)
         self.aceleration = [0, 9.8]
         self.initialSpeed = [0.9, -30]
         self.grupos = grupos
