@@ -58,6 +58,10 @@ class zanahoriaBullet(Bullet):
         if self.__correccion >= 60:
             self.Time[1] = 0
             self.initialPosition[1] = self.rect.y
-            self.initialSpeed[1] = -4*(self.rect.y - self.getObjectivos()[0].rect.y)/abs((self.rect.y - self.getObjectivos()[0].rect.y))
+            rest = self.rect.y - self.getObjectivos()[0].rect.y
+            if rest == 0:
+                self.initialSpeed[1] = 0
+            else:
+                self.initialSpeed[1] = -2*(rest/abs(rest))
             self.__correccion = 0
 

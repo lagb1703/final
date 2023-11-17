@@ -47,6 +47,7 @@ class Game:
                 del self.__guis[0]
             if len(nextGui) > 0:
                 self.__guis.insert(0, nextGui[0])
+            clock.tick(self.FPS)
 
     def rescale(self, newResolution):
         self.resolution = newResolution
