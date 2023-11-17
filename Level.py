@@ -59,8 +59,6 @@ class Level(GUI, Observable):
         # newDisplay = pg.transform.scale(self._display, self.__scales)
         # self._display.fill((0,0,0,0))
         # self._display.blit(newDisplay, (0,0))
-        # image = pg.image.load("./sprites/Kirby/Default.png")
-        # self._display.blit(image, (0,0))
         pg.display.update()
         self.notifyAll()
         collector = [[], [], self.time/self.FPS]

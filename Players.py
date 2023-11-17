@@ -1,7 +1,7 @@
 from controllablePlayerObject import controllablePlayerObject as cpo
 import pygame as pg
 from Alarm import Alarm
-from Bullets import Bullet
+from Bullets import PlayerBullet
 from physicalObject import physicalObject
 
 load = pg.image.load
@@ -33,11 +33,11 @@ class kirby(cpo):
         ruteKirby = "./sprites/Kirby/"
         default = [[load(f"{ruteKirby}Default.png").convert_alpha()], 1]
         caminar = [[load(f"{ruteKirby}Caminar/caminar {i}.png").convert_alpha() for i in range(1,9)], 60]
-        preSalto = [[load(f"{ruteKirby}Saltar/presalto-aterrizaje.png"), 
-            load(f"{ruteKirby}Saltar/saltico1.png"), 
-            load(f"{ruteKirby}Saltar/saltico2.png")], 120]
-        salto = [[load(f"{ruteKirby}Saltar/aire.png")], 1]
-        aterrizaje = [[load(f"{ruteKirby}Saltar/aterrizar.png"), preSalto[0]], 10]
+        preSalto = [[load(f"{ruteKirby}Saltar/presalto-aterrizaje.png").convert_alpha(), 
+            load(f"{ruteKirby}Saltar/saltico1.png").convert_alpha(), 
+            load(f"{ruteKirby}Saltar/saltico2.png").convert_alpha()], 120]
+        salto = [[load(f"{ruteKirby}Saltar/aire.png").convert_alpha()], 1]
+        aterrizaje = [[load(f"{ruteKirby}Saltar/aterrizar.png").convert_alpha(), preSalto[0]], 10]
         disparo = [[load(f"{ruteKirby}Disparo/disparo {i}.png").convert_alpha() for i in range(1,5)], 60]
         super().__init__(0, (100, 70), {"initial":default,
         "caminar":caminar,
@@ -83,8 +83,8 @@ class kirby(cpo):
         self.initialPosition[1] = self.rect.y
         self.Time[1] = 0
 
-    def update(self, colector=None):
-        super().update()
+
+    def __patronMovimiento(self, colector=None):
         input = self.control.getInput()
         if self.__superDisparo:
             return
@@ -116,13 +116,18 @@ class kirby(cpo):
 
         if input.THREE and self.__disparoHabilitado:
             self.__disparoHabilitado = False
-            imagen = pg.surface.Surface((500, 500))
-            imagen.fill((0,0,0))
             self.setAnimationName("disparo")
             colector[0].append(Alarm(colector[2], 4, False, self.__habilitarDisparo))
-            colector[1].append((Bullet(colector[2], (50, 10), 
-            {"initial":[[imagen], 0]}, (50*self.direction,0), 100
-            , None, initialPosition=(self.rect.x, self.rect.y), FPS=5),"bullets", 1))
+            colector[1].append(
+                (PlayerBullet(
+                    colector[2], 
+                    self.direction, 
+                    self.grupos["enemigos"], 
+                    self.__conectaDisparo, 
+                    (self.rect.x, self.rect.y+self.resolution[1]/2 - 10)
+                    )
+                ,"bullets", 1)
+            )
 
         if input.TWO and self.__dashHabilitado:
             colector[0].append(Alarm(colector[2], 1, False, self.__detenerDash))
@@ -142,3 +147,18 @@ class kirby(cpo):
 
         if not(input.LEFT  or not(self.__disparoHabilitado) or input.THREE or input.FOUR or input.RIGTH or not(self.collitionUpGroup(self.grupos["suelo"], 1))):
             self.setAnimationName("initial")
+
+    def aumentarX(self, valor):
+        self.rect.x += valor
+
+    def __atras(self):
+        self.aumentarX(-1*self.direction*1.3)
+
+    def __patronEnemigos(self, colector=None):
+        if self.collitionOnGroup(self.grupos["enemigos"]):
+            colector[0].append(Alarm(colector[2], 1.4, False, self.__atras))
+
+    def update(self, colector=None):
+        super().update()
+        self.__patronEnemigos(colector=colector)
+        self.__patronMovimiento(colector=colector)

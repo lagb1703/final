@@ -4,6 +4,7 @@ from Control import Control
 from Camera import Camera
 from Object import Object
 from Players import kirby
+from Jefes import Zanahoria, Cebolla
 
 from physicalObject import physicalObject
 import pygame as pg
@@ -11,7 +12,7 @@ import pygame as pg
 class sueloDecorativo(Object):
 
     def __init__(self, id, posicion:tuple, medidas:tuple):
-        imagen = pg.image.load("./sprites/Background/piso.png")
+        imagen = pg.image.load("./sprites/Background/piso.png").convert_alpha()
         super().__init__(id, medidas, {"initial":[[imagen], 0]}, initialPosition=posicion)
 
 class paredInvisible(physicalObject):
@@ -52,12 +53,18 @@ class entryLevel(Level):
     def init(self):
         decoracion = sueloDecorativo(0, (0, self.resolution[1]-30), (self.resolution[0], 30))
         sueloReal = paredInvisible(1, (0, self.resolution[1]-20), (self.resolution[0], 20))
+        zana = Zanahoria(2, self.resolution)
         self.getObjectsGroup("decoracion").add(decoracion)
         self.getObjectsGroup("collition").add(sueloReal)
-        jugador = kirby((100, 300), {"suelo":self.getObjectsGroup("collition")})
+        self.getObjectsGroup("enemigos").add(zana)
+        jugador = kirby((500, 300), {
+            "suelo":self.getObjectsGroup("collition"),
+            "enemigos":self.getObjectsGroup("enemigos")
+            })
         self.getObjectsGroup("player").add(jugador)
         self.addObjectInLayer(decoracion, z=1)
         self.addObjectInLayer(jugador, z=2)
+        self.addObjectsInLayer(self.getObjectsGroup("enemigos"), z=3)
 
     def logic(self, nextGui=None):
         super().logic(nextGui=nextGui)

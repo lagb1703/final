@@ -21,13 +21,13 @@ class Bloque(pygame.sprite.Sprite):
      
     # LEER ANTES DE USAR:
     # Este constructor nos deja utilizar cualquier tipo de gráfica:
-    # mi_sprite = Bloque("cualquier_grafica.png")
+    # mi_sprite = Bloque("cualquier_grafica.png").convert_alpha()
     # Pero si NO quieres cualquier gráfica, puedes usar en su lugar lo siguiente:
     '''
     def __init__(self):
         super().__init__() 
  
-        self.image = pygame.image.load("mi_grafica.png").convert()
+        self.image = pygame.image.load("mi_grafica.png").convert_alpha().convert()
  
         # Establecemos el color de fondo como transparente. Ajustamos a BLANCO si tu
         # fondo es BLANCO.

@@ -56,6 +56,13 @@ class physicalObject(Object):
             return False
         return True
 
+    def collitionOnSprite(self, object:Object):
+        if not(object.rect.x < self.rect.x < object.rect.x + object.resolution[0] or object.rect.x < self.rect.x + self.resolution[0] < object.rect.x + object.resolution[0]):
+            return False
+        if not(object.rect.y < self.rect.y < object.rect.y + object.resolution[1] or object.rect.y < self.rect.y + self.resolution[1] < object.rect.y + object.resolution[1]):
+            return False
+        return True
+
     def collitionUpGroup(self, group:Objects, distance:int):
         for i in group.sprites():
             solucion = self.collitionUpSprite(i, distance)
@@ -83,6 +90,15 @@ class physicalObject(Object):
             if solucion:
                 return solucion
         return False
+
+    def collitionOnGroup(self, group:Objects):
+        for i in group.sprites():
+            solucion = self.collitionOnSprite(i)
+            if solucion:
+                return solucion
+        return False
+
+        
 
     def draw(self, surface:pg.surface.Surface):
         if self.direction == -1 and not(self.__aplicado):

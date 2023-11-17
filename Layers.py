@@ -12,7 +12,7 @@ class Layer(pg.sprite.Group):
                 if time%i.getAnimationFrameMax() == 0:
                     i.animar()
             i.draw(surface)
-            # image = pg.image.load("./sprites/Kirby/Default.png")
+            # image = pg.image.load("./sprites/Kirby/Default.png").convert_alpha()
             # print(i.image.get_alpha())
             # surface.blit(i.image, (0,0))
             #surface.blit(i.image, (0,0))
