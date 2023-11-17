@@ -72,8 +72,8 @@ class Zanahoria(ncpo):
             )
             colector[1].append(
                 (zanahoriaBullet(colector[2], self.grupos, self.__inpactFunction, self.screanResolution, 
-                initialPosition=(self.rect.x + self.resolution[0]/2, self.rect.y  + self.resolution[1]/2)),
-                "bullets", 1)
+                initialPosition=(self.rect.x + self.resolution[0]/2, self.rect.y + self.resolution[1]/2 + 40)),
+                "bullets", 4)
                 )
             self.setAnimationName("atacando")
             self.__atacando = False

@@ -81,7 +81,7 @@ class Control:
             hat = jk.get_hat(0)
             input = Input(hat[mg.UP_DOWN] == mg.UP, hat[mg.UP_DOWN] == mg.DOWN, 
             hat[mg.LEFT_RIGTH] == mg.LEFT, hat[mg.LEFT_RIGTH] == mg.RIGTH,
-            jk.get_button(mg.BT_ONE), jk.get_button(mg.BT_TWO), jk.get_button(mg.BT_THREE),
-            jk.get_button(mg.BT_FOUR), jk.get_button(mg.BT_L1), jk.get_button(mg.BT_R1),
+            jk.get_button(mg.BT_TWO),jk.get_button(mg.BT_ONE),
+            jk.get_button(mg.BT_FOUR), jk.get_button(mg.BT_THREE), jk.get_button(mg.BT_L1), jk.get_button(mg.BT_R1),
             jk.get_button(mg.BT_START), jk.get_button(mg.BT_SELECT))
         return input
