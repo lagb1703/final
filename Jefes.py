@@ -1,5 +1,7 @@
 from noControllablePlayerObject import noControllablePlayerObject as ncpo
 import pygame as pg
+from Object import Objects
+from Bullets import zanahoriaBullet
 
 load = pg.image.load
 
@@ -28,7 +30,7 @@ class Cebolla(ncpo):
 
 class Zanahoria(ncpo):
 
-    def __init__(self, id, resolution):
+    def __init__(self, id, grupos:Objects, resolution):
         jefeZanahoria = "./sprites/Zanahoria/"
         zanahoriaNormal = [[load(f"{jefeZanahoria}normal.png").convert_alpha()], 0]
         zanahoriaLanzando = [[load(f"{jefeZanahoria}zanahoria {i}.png").convert_alpha() for i in range(2, 6)],
@@ -37,15 +39,27 @@ class Zanahoria(ncpo):
             "initial":zanahoriaNormal,
             "atacando":zanahoriaLanzando
         }
-        self.__atacando = False
+        self.screanResolution = resolution
+        self.grupos = grupos
+        self.__atacando = True
         super().__init__(id, (250, 400), animaciones
             , initialPosition=(0, 50), puntoVida=500)
 
     def init(self):
         pass
 
+    def __inpactFunction(self, enemigo):
+        print(enemigo)
+
     def update(self, colector=None):
-        pass
+        super().update(colector=colector)
+        if self.__atacando:
+            colector[1].append(
+                (zanahoriaBullet(colector[2], self.grupos, self.__inpactFunction, self.screanResolution),
+                "bullets", 3)
+                )
+            self.__atacando = False
+
 
 class Papa(ncpo):
     

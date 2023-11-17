@@ -2,7 +2,7 @@ from GUI import GUI
 from Level import Level
 from Control import Control
 from Camera import Camera
-from Object import Object
+from Object import Object, Objects
 from Players import kirby
 from Jefes import Zanahoria, Cebolla
 
@@ -53,15 +53,17 @@ class entryLevel(Level):
     def init(self):
         decoracion = sueloDecorativo(0, (0, self.resolution[1]-30), (self.resolution[0], 30))
         sueloReal = paredInvisible(1, (0, self.resolution[1]-20), (self.resolution[0], 20))
-        zana = Zanahoria(2, self.resolution)
+        enemigos = Objects("enemigos")
+        self.addObjectsGroup(enemigos)
         self.getObjectsGroup("decoracion").add(decoracion)
         self.getObjectsGroup("collition").add(sueloReal)
-        self.getObjectsGroup("enemigos").add(zana)
         jugador = kirby((500, 300), {
             "suelo":self.getObjectsGroup("collition"),
-            "enemigos":self.getObjectsGroup("enemigos")
+            "enemigos":enemigos
             })
         self.getObjectsGroup("player").add(jugador)
+        zana = Zanahoria(2, self.getObjectsGroup("player"), self.resolution)
+        enemigos.add(zana)
         self.addObjectInLayer(decoracion, z=1)
         self.addObjectInLayer(jugador, z=2)
         self.addObjectsInLayer(self.getObjectsGroup("enemigos"), z=3)

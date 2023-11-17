@@ -12,8 +12,8 @@ class Live(physicalObject):
     def vida(self):
         pass
 
-    def update(self):
-        if self.livePoints < 0:
+    def update(self, colector=None):
+        if self.livePoints <= 0:
             self.dead()
         else:
             self.vida()

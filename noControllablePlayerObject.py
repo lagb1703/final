@@ -9,4 +9,4 @@ class noControllablePlayerObject(Live):
         pass
 
     def update(self, colector=None):
-        pass
+        super().update(colector=colector)
