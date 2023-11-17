@@ -41,6 +41,33 @@ class inicio(GUI):
                 pass
             return
         Control.create()
+
+
+class fin(GUI):
+
+    def __init__(self, display:pg.surface.Surface, resolution:tuple):
+        image = pg.image.load("./sprites/Background/good ending.jpg")
+        super().__init__(display, image, resolution)
+        self.init()
+
+    def init(self):
+        pass
+
+    def logic(self, nextGui=None):
+        super().logic()
+
+class derrota(GUI):
+
+    def __init__(self, display:pg.surface.Surface, resolution:tuple):
+        image = pg.image.load("./sprites/Background/Death menu.jpg")
+        super().__init__(display, image, resolution)
+        self.init()
+
+    def init(self):
+        pass
+
+    def logic(self, nextGui=None):
+        super().logic()
         
 class entryLevel(Level):
 
@@ -49,6 +76,15 @@ class entryLevel(Level):
         camera = Camera(0, 0, resolution)
         super().__init__(display, image, camera, resolution=resolution, screenResolution=screenResolution)
         self.init()
+        self.__next = None
+
+    def __loadVictorie(self):
+        self.__next = fin(self._display, self.resolution)
+        self.exit()
+
+    def __loadDerrote(self):
+        self.__next = derrota(self._display, self.resolution)
+        self.exit()
 
     def init(self):
         decoracion = sueloDecorativo(0, (0, self.resolution[1]-30), (self.resolution[0], 30))
@@ -60,9 +96,9 @@ class entryLevel(Level):
         jugador = kirby((500, 300), {
             "suelo":self.getObjectsGroup("collition"),
             "enemigos":enemigos
-            })
+            }, ends=self.__loadDerrote)
         self.getObjectsGroup("player").add(jugador)
-        zana = Zanahoria(2, self.getObjectsGroup("player"), self.resolution)
+        zana = Zanahoria(2, self.getObjectsGroup("player"), self.resolution, ends=self.__loadVictorie)
         enemigos.add(zana)
         self.addObjectInLayer(decoracion, z=1)
         self.addObjectInLayer(jugador, z=2)
@@ -70,3 +106,5 @@ class entryLevel(Level):
 
     def logic(self, nextGui=None):
         super().logic(nextGui=nextGui)
+        if self.__next:
+            nextGui.append(self.__next)

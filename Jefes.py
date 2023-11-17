@@ -2,6 +2,7 @@ from noControllablePlayerObject import noControllablePlayerObject as ncpo
 import pygame as pg
 from Object import Objects
 from Bullets import zanahoriaBullet
+from Alarm import Alarm
 
 load = pg.image.load
 
@@ -30,11 +31,11 @@ class Cebolla(ncpo):
 
 class Zanahoria(ncpo):
 
-    def __init__(self, id, grupos:Objects, resolution):
+    def __init__(self, id, grupos:Objects, resolution, ends=None):
         jefeZanahoria = "./sprites/Zanahoria/"
-        zanahoriaNormal = [[load(f"{jefeZanahoria}normal.png").convert_alpha()], 0]
+        zanahoriaNormal = [[load(f"{jefeZanahoria}normal.png").convert_alpha()], 1]
         zanahoriaLanzando = [[load(f"{jefeZanahoria}zanahoria {i}.png").convert_alpha() for i in range(2, 6)],
-        30]
+        60]
         animaciones = {
             "initial":zanahoriaNormal,
             "atacando":zanahoriaLanzando
@@ -42,6 +43,7 @@ class Zanahoria(ncpo):
         self.screanResolution = resolution
         self.grupos = grupos
         self.__atacando = True
+        self.__ends = ends
         super().__init__(id, (250, 400), animaciones
             , initialPosition=(0, 50), puntoVida=500)
 
@@ -49,16 +51,29 @@ class Zanahoria(ncpo):
         pass
 
     def __inpactFunction(self, enemigo):
-        print(enemigo)
+        enemigo.livePoints -= 10
+
+    def __setNormal(self):
+        self.setAnimationName("initial")
 
     def update(self, colector=None):
         super().update(colector=colector)
         if self.__atacando:
+            colector[0].append(
+                Alarm(colector[2], 4, False, self.__setNormal)
+            )
             colector[1].append(
-                (zanahoriaBullet(colector[2], self.grupos, self.__inpactFunction, self.screanResolution),
-                "bullets", 3)
+                (zanahoriaBullet(colector[2], self.grupos, self.__inpactFunction, self.screanResolution, 
+                initialPosition=(self.rect.x + self.resolution[0]/2, self.rect.y  + self.resolution[1]/2)),
+                "bullets", 1)
                 )
+            self.setAnimationName("atacando")
             self.__atacando = False
+
+    def dead(self):
+        if self.__ends:
+            self.__ends()
+        super().dead()
 
 
 class Papa(ncpo):

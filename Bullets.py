@@ -46,16 +46,18 @@ class zanahoriaBullet(Bullet):
 
     def __init__(self, id, objectivos:Objects, inpactFuntion, screanResolution:tuple, initialPosition = (0,0), FPS = 60):
         Sprite = [[load("./sprites/Zanahoria/proyectil.png").convert_alpha()], 0]
-        super().__init__(id, (100, 40),{"initial":Sprite}, (10, 0), objectivos, inpactFuntion, screanResolution,initialPosition=initialPosition, FPS=FPS)
+        super().__init__(id, (60, 30),{"initial":Sprite}, (10, 0), objectivos, inpactFuntion, screanResolution,initialPosition=initialPosition, FPS=FPS)
         self.__correccion = 0
 
 
     def update(self, colector=None):
         super().update(colector=colector)
+        if len(self.getObjectivos()) == 0:
+            return
         self.__correccion += 1
         if self.__correccion >= 60:
             self.Time[1] = 0
             self.initialPosition[1] = self.rect.y
-            self.initialSpeed[1] = -5*(self.rect.y - self.getObjectivos()[0].rect.y)/abs((self.rect.y - self.getObjectivos()[0].rect.y))
+            self.initialSpeed[1] = -4*(self.rect.y - self.getObjectivos()[0].rect.y)/abs((self.rect.y - self.getObjectivos()[0].rect.y))
             self.__correccion = 0
 

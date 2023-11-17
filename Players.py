@@ -28,7 +28,7 @@ class LaserBeam(physicalObject):
 
 class kirby(cpo):
 
-    def __init__(self, posicion:tuple, grupos:dict, screanResolution:tuple = (720, 420)):
+    def __init__(self, posicion:tuple, grupos:dict, screanResolution:tuple = (720, 420), ends = None):
         ruteKirby = "./sprites/Kirby/"
         default = [[load(f"{ruteKirby}Default.png").convert_alpha()], 1]
         caminar = [[load(f"{ruteKirby}Caminar/caminar {i}.png").convert_alpha() for i in range(1,9)], 60]
@@ -53,6 +53,7 @@ class kirby(cpo):
         self.__cartas = 0
         self.__superDisparo = False
         self.screanResolution = screanResolution
+        self.__ends = ends
 
     def setDash(self, valor:bool):
         self.__dash = valor
@@ -76,7 +77,7 @@ class kirby(cpo):
         return self.__cartas
 
     def __conectaDisparo(self, enemigo):
-        enemigo.livePoints -= 25
+        enemigo.livePoints -= 20
         self.__cartas += 1
 
     def __setSalto(self):
@@ -155,6 +156,7 @@ class kirby(cpo):
         self.rect.x += valor
 
     def __atras(self):
+        self.livePoints = 0
         self.aumentarX(-1*self.direction*1.3)
 
     def __patronEnemigos(self, colector=None):
@@ -165,3 +167,8 @@ class kirby(cpo):
         super().update()
         self.__patronEnemigos(colector=colector)
         self.__patronMovimiento(colector=colector)
+
+    def dead(self):
+        if self.__ends:
+            self.__ends()
+        super().dead()
